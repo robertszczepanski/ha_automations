@@ -189,8 +189,8 @@ variables:
   alarm_time: !input alarm_time
   alarm_start_time: "{{ alarm_time }}"
 
-trigger:
-  - platform: time
+triggers:
+  - trigger: time
     at: !input alarm_time
 
 condition:
