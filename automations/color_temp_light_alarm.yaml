@@ -5,6 +5,8 @@ blueprint:
     TUYA TS0505B. This has been created due to the fact that such light bulbs have to bright white
     on lowest brightness which must be compensated by controlling the color LEDs at darker settings
     and then switching to white LEDS.
+  source_url: >-
+    https://github.com/robertszczepanski/ha_automations/blob/light_alarm_test/automations/color_temp_light_alarm.yaml
   domain: automation
   input:
     alarm_time:
