@@ -274,9 +274,18 @@ action:
           retain: false
           qos: 2
           topic: "{{ target_light_topic }}/set"
-          payload: "{\"transition\":\"0\",\"brightness\":\"2\",\"color_temp\":\"{{ initial_mired }}\"}"
+          payload: "{\"transition\":\"0\"}"
       - delay:
-          seconds: 1
+          seconds: 2
+      - action: mqtt.publish
+        data:
+          evaluate_payload: false
+          retain: false
+          qos: 2
+          topic: "{{ target_light_topic }}/set"
+          payload: "{\"brightness\":\"2\",\"color_temp\":\"{{ initial_mired }}\"}"
+      - delay:
+          seconds: 2
       - action: light.turn_on
         data:
           color_temp_kelvin: !input initial_kelvin
