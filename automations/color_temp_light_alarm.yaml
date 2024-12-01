@@ -213,11 +213,11 @@ action:
   - delay:
       seconds: 5
   - if:
-      - condition: and
+      conditions:
         - condition: state
           entity_id: !input target_light
           state: "on"
-        - condition: state
+        - ccondition: state
           entity_id: !input on_off_condition
           state: "on"
     then:
@@ -230,11 +230,11 @@ action:
 
   # Switch to color temp mode
   - if:
-      - condition: and
+      conditions:
         - condition: state
           entity_id: !input target_light
           state: "on"
-        - condition: state
+        - ccondition: state
           entity_id: !input on_off_condition
           state: "on"
     then:
@@ -247,11 +247,11 @@ action:
 
   # First phase of color temp mode
   - if:
-      - condition: and
+      conditions:
         - condition: state
           entity_id: !input target_light
           state: "on"
-        - condition: state
+        - ccondition: state
           entity_id: !input on_off_condition
           state: "on"
     then:
@@ -264,11 +264,11 @@ action:
 
   # Second phase of color temp mode
   - if:
-      - condition: and
+      conditions:
         - condition: state
           entity_id: !input target_light
           state: "on"
-        - condition: state
+        - ccondition: state
           entity_id: !input on_off_condition
           state: "on"
     then:
@@ -281,11 +281,11 @@ action:
 
   # Last phase of color temp mode
   - if:
-      - condition: and
+      conditions:
         - condition: state
           entity_id: !input target_light
           state: "on"
-        - condition: state
+        - ccondition: state
           entity_id: !input on_off_condition
           state: "on"
     then:
