@@ -184,6 +184,7 @@ variables:
   target_light_topic: !input target_light_topic
   initial_kelvin: !input initial_kelvin
   initial_mired: "{{ 1000000 / initial_kelvin }}"
+  initial_color: !input initial_color
   color_phase_length: !input color_phase_length
   color_phase_length_in_seconds: "{{ color_phase_length * 60}}"
   alarm_length_1: !input alarm_length_1
@@ -232,12 +233,12 @@ action:
           retain: false
           qos: 2
           topic: "{{ target_light_topic }}/set"
-          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"{{ initial_color }}\"}"
+          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_xy\":\"{{ initial_color }}\"}"
       - delay:
           seconds: 1
       - action: light.turn_on
         data:
-          rgb_color: !input initial_color
+          rgb_color: "{{ initial_color }}"
           brightness: 2
           entity_id: !input target_light
   - delay:
