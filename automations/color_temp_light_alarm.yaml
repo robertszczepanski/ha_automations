@@ -199,12 +199,24 @@ condition:
     state: "on"
 
 action:
-  # Start in color mode
+  # Setup LEDs and start in color mode
   - if:
       - condition: state
         entity_id: !input target_light
         state: "off"
     then:
+      - action: light.turn_off
+        data:
+          color_temp_kelvin: !input initial_kelvin
+          transition: 0
+          brightness: 2
+          entity_id: !input target_light
+      - action: light.turn_off
+        data:
+          rgb_color: !input initial_color
+          transition: 0
+          brightness: 2
+          entity_id: !input target_light
       - action: light.turn_on
         data:
           rgb_color: !input initial_color
@@ -244,6 +256,8 @@ action:
           transition: 10
           brightness: 2
           entity_id: !input target_light
+  - delay:
+      seconds: 10
 
   # First phase of color temp mode
   - if:
@@ -260,6 +274,8 @@ action:
           transition: "{{ alarm_length_1_in_seconds }}"
           brightness: "{{ target_brightness_1_value }}"
           entity_id: !input target_light
+  - delay:
+      seconds: "{{ alarm_length_1_in_seconds }}"
 
   # Second phase of color temp mode
   - if:
@@ -276,6 +292,8 @@ action:
           transition: "{{ alarm_length_2_in_seconds }}"
           brightness: "{{ target_brightness_2_value }}"
           entity_id: !input target_light
+  - delay:
+      seconds: "{{ alarm_length_2_in_seconds }}"
 
   # Last phase of color temp mode
   - if:
@@ -292,5 +310,7 @@ action:
           transition: "{{ alarm_length_3_in_seconds }}"
           brightness: "{{ target_brightness_3_value }}"
           entity_id: !input target_light
+  - delay:
+      seconds: "{{ alarm_length_3_in_seconds }}"
 
 max: 10
