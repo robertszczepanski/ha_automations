@@ -191,7 +191,7 @@ variables:
 
 trigger:
   - platform: time
-    at: "{{ alarm_start_time }}"
+    at: !input alarm_time
 
 condition:
   - condition: state
@@ -207,7 +207,7 @@ action:
     then:
       - action: light.turn_on
         data:
-          color_xy: !input initial_color
+          rgb_color: !input initial_color
           brightness: 2
           entity_id: !input target_light
   - delay:
@@ -222,7 +222,7 @@ action:
     then:
       - action: light.turn_on
         data:
-          color_xy: !input initial_color
+          rgb_color: !input initial_color
           transition:  "{{ color_phase_length_in_seconds }}"
           brightness: 254
           entity_id: !input target_light
