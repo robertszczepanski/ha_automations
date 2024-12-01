@@ -185,11 +185,7 @@ variables:
   target_brightness_3: !input target_brightness_3
   target_brightness_3_value: "{{ target_brightness_3 * 2.55}}"
   alarm_time: !input alarm_time
-  alarm_start_time: "{{
-    alarm_time - (color_phase_length * 60)
-               - (alarm_length_1 * 60)
-               - (alarm_length_2 * 60)
-               - (alarm_length_3 * 60) }}"
+  alarm_start_time: "{{ alarm_time }}"
 
 trigger:
   - platform: time
