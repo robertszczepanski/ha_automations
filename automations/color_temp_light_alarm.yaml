@@ -223,7 +223,7 @@ action:
           retain: false
           qos: 2
           topic: "{{ target_light_topic }}/set"
-          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"'{{ initial_mired }}'\"}"
+          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"{{ initial_mired }}\"}"
       - delay:
           seconds: 1
       - action: mqtt.publish
@@ -232,7 +232,7 @@ action:
           retain: false
           qos: 2
           topic: "{{ target_light_topic }}/set"
-          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"'{{ initial_color }}'\"}"
+          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"{{ initial_color }}\"}"
       - delay:
           seconds: 1
       - action: light.turn_on
