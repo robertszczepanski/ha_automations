@@ -221,18 +221,18 @@ action:
         data:
           topic: "{{ target_light_topic }}"
           payload: >-
-          {"state": "OFF",
-          "brightness": 2,
-          "color_temp": "{{ initial_mired }}"
+          {\"state\": \"OFF\",
+          \"brightness\": \"2\",
+          \"color_temp\": \"'{{ initial_mired }}'\"
           }
       - action: mqtt.publish
         data:
           topic: "{{ target_light_topic }}"
           payload: >-
-          {"state": "OFF",
-          "brightness": 2,
-          "color_temp": "{{ initial_color }}"
-          }
+          "{\"state\": \"OFF\",
+          \"brightness": \"2\",
+          \"color_temp": \"'{{ initial_color }}'\"
+          }"
       - action: light.turn_on
         data:
           rgb_color: !input initial_color
