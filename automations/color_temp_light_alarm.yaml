@@ -222,15 +222,19 @@ action:
           evaluate_payload: false
           retain: false
           qos: 2
-          topic: "'{{ target_light_topic }}'/set"
+          topic: "{{ target_light_topic }}/set"
           payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"'{{ initial_mired }}'\"}"
+      - delay:
+          seconds: 1
       - action: mqtt.publish
         data:
           evaluate_payload: false
           retain: false
           qos: 2
-          topic: "'{{ target_light_topic }}'/set"
+          topic: "{{ target_light_topic }}/set"
           payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"'{{ initial_color }}'\"}"
+      - delay:
+          seconds: 1
       - action: light.turn_on
         data:
           rgb_color: !input initial_color
