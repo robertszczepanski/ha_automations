@@ -216,7 +216,7 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
-      - ccondition: state
+      - condition: state
         entity_id: !input on_off_condition
         state: "on"
     then:
@@ -232,7 +232,7 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
-      - ccondition: state
+      - condition: state
         entity_id: !input on_off_condition
         state: "on"
     then:
@@ -248,7 +248,7 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
-      - ccondition: state
+      - condition: state
         entity_id: !input on_off_condition
         state: "on"
     then:
@@ -264,7 +264,7 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
-      - ccondition: state
+      - condition: state
         entity_id: !input on_off_condition
         state: "on"
     then:
@@ -280,7 +280,7 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
-      - ccondition: state
+      - condition: state
         entity_id: !input on_off_condition
         state: "on"
     then:
