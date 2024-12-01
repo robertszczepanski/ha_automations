@@ -233,7 +233,7 @@ action:
           retain: false
           qos: 2
           topic: "{{ target_light_topic }}/set"
-          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_xy\":\"{{ initial_color }}\"}"
+          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color\":{\"rgb\":\"{{ initial_color[0] }},{{ initial_color[1] }},{{ initial_color[2] }}\"}}"
       - delay:
           seconds: 1
       - action: light.turn_on
