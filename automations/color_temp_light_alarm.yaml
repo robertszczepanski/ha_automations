@@ -223,9 +223,11 @@ action:
       - action: light.turn_on
         data:
           rgb_color: !input initial_color
-          transition:  30
+          transition:  "{{ color_phase_length_in_seconds }}"
           brightness: 254
           entity_id: !input target_light
+  - delay:
+      seconds: "{{ color_phase_length_in_seconds }}"
 
   # Switch to color temp mode
   - if:
@@ -291,5 +293,4 @@ action:
           brightness: "{{ target_brightness_3_value }}"
           entity_id: !input target_light
 
-mode: parallel
 max: 10
