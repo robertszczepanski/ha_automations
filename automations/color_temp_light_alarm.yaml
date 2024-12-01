@@ -211,12 +211,13 @@ action:
   - delay:
       seconds: 5
   - if:
-      - condition: state
-        entity_id: !input target_light
-        state: "on"
-      - condition: state
-        entity_id: !input on_off_condition
-        state: "on"
+      - condition: and
+        - condition: state
+          entity_id: !input target_light
+          state: "on"
+        - condition: state
+          entity_id: !input on_off_condition
+          state: "on"
     then:
       - action: light.turn_on
         data:
@@ -227,12 +228,13 @@ action:
 
   # Switch to color temp mode
   - if:
-      - condition: state
-        entity_id: !input target_light
-        state: "on"
-      - condition: state
-        entity_id: !input on_off_condition
-        state: "on"
+      - condition: and
+        - condition: state
+          entity_id: !input target_light
+          state: "on"
+        - condition: state
+          entity_id: !input on_off_condition
+          state: "on"
     then:
       - action: light.turn_on
         data:
@@ -243,12 +245,13 @@ action:
 
   # First phase of color temp mode
   - if:
-      - condition: state
-        entity_id: !input target_light
-        state: "on"
-      - condition: state
-        entity_id: !input on_off_condition
-        state: "on"
+      - condition: and
+        - condition: state
+          entity_id: !input target_light
+          state: "on"
+        - condition: state
+          entity_id: !input on_off_condition
+          state: "on"
     then:
       - action: light.turn_on
         data:
@@ -259,12 +262,13 @@ action:
 
   # Second phase of color temp mode
   - if:
-      - condition: state
-        entity_id: !input target_light
-        state: "on"
-      - condition: state
-        entity_id: !input on_off_condition
-        state: "on"
+      - condition: and
+        - condition: state
+          entity_id: !input target_light
+          state: "on"
+        - condition: state
+          entity_id: !input on_off_condition
+          state: "on"
     then:
       - action: light.turn_on
         data:
@@ -275,12 +279,13 @@ action:
 
   # Last phase of color temp mode
   - if:
-      - condition: state
-        entity_id: !input target_light
-        state: "on"
-      - condition: state
-        entity_id: !input on_off_condition
-        state: "on"
+      - condition: and
+        - condition: state
+          entity_id: !input target_light
+          state: "on"
+        - condition: state
+          entity_id: !input on_off_condition
+          state: "on"
     then:
       - action: light.turn_on
         data:
