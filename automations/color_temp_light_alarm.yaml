@@ -223,7 +223,7 @@ action:
       - action: light.turn_on
         data:
           rgb_color: !input initial_color
-          transition:  "{{ color_phase_length_in_seconds }}"
+          transition:  30
           brightness: 254
           entity_id: !input target_light
 
