@@ -224,15 +224,6 @@ action:
           retain: false
           qos: 2
           topic: "{{ target_light_topic }}/set"
-          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"{{ initial_mired }}\"}"
-      - delay:
-          seconds: 1
-      - action: mqtt.publish
-        data:
-          evaluate_payload: false
-          retain: false
-          qos: 2
-          topic: "{{ target_light_topic }}/set"
           payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color\":{\"rgb\":\"{{ initial_color[0] }},{{ initial_color[1] }},{{ initial_color[2] }}\"}}"
       - delay:
           seconds: 1
@@ -269,6 +260,15 @@ action:
         entity_id: !input on_off_condition
         state: "on"
     then:
+      - action: mqtt.publish
+        data:
+          evaluate_payload: false
+          retain: false
+          qos: 2
+          topic: "{{ target_light_topic }}/set"
+          payload: "{\"state\":\"OFF\",\"brightness\":\"2\",\"color_temp\":\"{{ initial_mired }}\"}"
+      - delay:
+          seconds: 1
       - action: light.turn_on
         data:
           color_temp_kelvin: !input initial_kelvin
