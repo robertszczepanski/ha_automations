@@ -1,0 +1,297 @@
+blueprint:
+  name: Color + Temp Light Alarm Automation
+  description: >-
+    Light alarm automation targetting light bulbs with bright white LEDs and dark color LEDs like
+    TUYA TS0505B. This has been created due to the fact that such light bulbs have to bright white
+    on lowest brightness which must be compensated by controlling the color LEDs at darker settings
+    and then switching to white LEDS.
+  domain: automation
+  input:
+    alarm_time:
+      name: Target Alarm Time
+      description: >-
+        Datetime helper for alarm to finish. Use time only and a workday sensor to determine what
+        days to run. The automation will automatically calculate when it should trigger based on
+        the alarm length.
+      selector:
+        entity:
+          filter:
+            - domain: input_datetime
+    on_off_condition:
+      name: On/Off Condition
+      description: >-
+        Either a toggle switch or a binary sensor that enables/disables the alarm.
+      selector:
+        entity:
+          filter:
+            - domain: ["binary_sensor", "input_boolean"]
+    target_light:
+      name: Lights
+      description: The light or group of lights that support color LEDs and white LEDs.
+      selector:
+        entity:
+          filter:
+            - domain: light
+    light_timeout:
+      name: Timeout
+      description: >-
+        Light will turn off after this time on last run. Set to zero to disable this feature (default).
+      selector:
+        number:
+          unit_of_measurement: "minutes"
+          mode: box
+          min: 0
+          max: 60
+      default: 0
+
+    # COLOR PHASE
+    initial_color:
+      name: Initial light color
+      description: >-
+        Color of light at which the light will begin first phase of brightening. Useful values for
+        RGB to K:
+          (255, 147,  41) is 1900K (default),
+          (255, 197, 143) is 2600K,
+          (255, 214, 170) is 2850K,
+          (255, 241, 224) is 3200K.
+      selector:
+        color_rgb:
+      default: [255, 147, 41]
+    color_phase_length:
+      name: Color phase length
+      description: Length of the first phase when the light bulb is in color mode.
+      selector:
+        number:
+          mode: box
+          unit_of_measurement: "minutes"
+          min: 0
+          max: 60
+      default: 10
+
+    # COLOR TEMP PHASE 1
+    initial_kelvin:
+      name: Initial Kelvin (warmest)
+      description: >-
+        Initial Kelvin value (warmest) for 1st run, it should be temperature close to the color
+        from the color phase.
+      selector:
+        color_temp:
+          unit: kelvin
+          min: 2000
+          max: 4000
+      default: 2000
+    target_kelvin_1:
+      name: Target Kelvin 1 (warm)
+      description: >-
+        Target Kelvin value (warm) for the end of the first temperature phase.
+      selector:
+        color_temp:
+          unit: kelvin
+          min: 2000
+          max: 8000
+      default: 2300
+    target_brightness_1:
+      name: Maximum Brightness 1 (dark)
+      description: Target brightness (dark) value for the first temperature phase
+      selector:
+        number:
+          unit_of_measurement: "%"
+          min: 1
+          max: 40
+      default: 15
+    alarm_length_1:
+      name: Alarm Length 1
+      description: Length of the first color temperature phase.
+      selector:
+        number:
+          unit_of_measurement: "minutes"
+          min: 5
+          max: 15
+      default: 10
+
+    # COLOR TEMP PHASE 2
+    target_kelvin_2:
+      description: >-
+        Target Kelvin value (neutral or cool) for second run
+      selector:
+        color_temp:
+          unit: kelvin
+          min: 2000
+          max: 8000
+      default: 3700
+      name: Target Kelvin 2
+    target_brightness_2:
+      name: Maximum Brightness 2 (semi-bright)
+      description: Target brightness (semi-bright) value for the second temperature phase
+      selector:
+        number:
+          unit_of_measurement: "%"
+          min: 1
+          max: 100
+      default: 50
+    alarm_length_2:
+      name: Alarm length 2
+      description: Length of the second color temperature phase.
+      selector:
+        number:
+          unit_of_measurement: "minutes"
+          min: 5
+          max: 15
+      default: 10
+
+    # COLOR TEMP PHASE 3
+    target_kelvin_3:
+      description: >-
+        Target Kelvin value (cold) for third run
+      selector:
+        color_temp:
+          unit: kelvin
+          min: 2000
+          max: 8000
+      default: 6000
+      name: Target Kelvin 3
+    target_brightness_3:
+      name: Maximum Brightness 3 (bright)
+      description: Target brightness (bright) value for the last temperature phase
+      selector:
+        number:
+          unit_of_measurement: "%"
+          min: 1
+          max: 100
+      default: 100
+    alarm_length_3:
+      name: Alarm Length 3
+      description: Length of the last color temperature phase.
+      selector:
+        number:
+          unit_of_measurement: "minutes"
+          min: 5
+          max: 15
+      default: 15
+
+variables:
+  color_phase_length: !input color_phase_length
+  color_phase_length_in_seconds: "{{ color_phase_length * 60}}"
+  alarm_length_1: !input alarm_length_1
+  alarm_length_1_in_seconds: "{{ alarm_length_1 * 60}}"
+  target_brightness_1: !input target_brightness_1
+  target_brightness_1_value: "{{ target_brightness_1 * 2.55}}"
+  alarm_length_2: !input alarm_length_2
+  alarm_length_2_in_seconds: "{{ alarm_length_2 * 60}}"
+  target_brightness_2: !input target_brightness_2
+  target_brightness_2_value: "{{ target_brightness_2 * 2.55}}"
+  alarm_length_3: !input alarm_length_3
+  alarm_length_3_in_seconds: "{{ alarm_length_3 * 60}}"
+  target_brightness_3: !input target_brightness_3
+  target_brightness_3_value: "{{ target_brightness_3 * 2.55}}"
+  alarm_time: !input alarm_time
+  alarm_start_time: "{{
+    alarm_time - (color_phase_length * 60)
+               - (alarm_length_1 * 60)
+               - (alarm_length_2 * 60)
+               - (alarm_length_3 * 60) }}"
+
+trigger:
+  - platform: time
+    at: "{{ alarm_start_time }}"
+
+condition:
+  - condition: state
+    entity_id: !input on_off_condition
+    state: "on"
+
+action:
+  # Start in color mode
+  - if:
+      - condition: state
+        entity_id: !input target_light
+        state: "off"
+    then:
+      - action: light.turn_on
+        data:
+          color_xy: !input initial_color
+          brightness: 2
+          entity_id: !input target_light
+  - delay:
+      seconds: 5
+  - if:
+      - condition: state
+        entity_id: !input target_light
+        state: "on"
+      - condition: state
+        entity_id: !input on_off_condition
+        state: "on"
+    then:
+      - action: light.turn_on
+        data:
+          color_xy: !input initial_color
+          transition:  "{{ color_phase_length_in_seconds }}"
+          brightness: 254
+          entity_id: !input target_light
+
+  # Switch to color temp mode
+  - if:
+      - condition: state
+        entity_id: !input target_light
+        state: "on"
+      - condition: state
+        entity_id: !input on_off_condition
+        state: "on"
+    then:
+      - action: light.turn_on
+        data:
+          color_temp_kelvin: !input initial_kelvin
+          transition: 10
+          brightness: 2
+          entity_id: !input target_light
+
+  # First phase of color temp mode
+  - if:
+      - condition: state
+        entity_id: !input target_light
+        state: "on"
+      - condition: state
+        entity_id: !input on_off_condition
+        state: "on"
+    then:
+      - action: light.turn_on
+        data:
+          color_temp_kelvin: !input target_kelvin_1
+          transition: "{{ alarm_length_1_in_seconds }}"
+          brightness: "{{ target_brightness_1_value }}"
+          entity_id: !input target_light
+
+  # Second phase of color temp mode
+  - if:
+      - condition: state
+        entity_id: !input target_light
+        state: "on"
+      - condition: state
+        entity_id: !input on_off_condition
+        state: "on"
+    then:
+      - action: light.turn_on
+        data:
+          color_temp_kelvin: !input target_kelvin_2
+          transition: "{{ alarm_length_2_in_seconds }}"
+          brightness: "{{ target_brightness_2_value }}"
+          entity_id: !input target_light
+
+  # Last phase of color temp mode
+  - if:
+      - condition: state
+        entity_id: !input target_light
+        state: "on"
+      - condition: state
+        entity_id: !input on_off_condition
+        state: "on"
+    then:
+      - action: light.turn_on
+        data:
+          color_temp_kelvin: !input target_kelvin_3
+          transition: "{{ alarm_length_3_in_seconds }}"
+          brightness: "{{ target_brightness_3_value }}"
+          entity_id: !input target_light
+
+mode: parallel
+max: 10
