@@ -232,16 +232,8 @@ action:
           rgb_color: "{{ initial_color }}"
           brightness: 2
           entity_id: !input target_light
-  - if:
-      - condition: state
-        entity_id: !input target_light
-        state: "on"
-      - condition: state
-        entity_id: !input on_off_condition
-        state: "on"
-    then:
-      - delay:
-          seconds: 5
+  - delay:
+      seconds: 5
   - if:
       - condition: state
         entity_id: !input target_light
