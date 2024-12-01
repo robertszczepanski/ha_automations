@@ -196,7 +196,7 @@ trigger:
 condition:
   - condition: state
     entity_id: !input on_off_condition
-    state: "on"
+    state: "true"
 
 action:
   # Start in color mode
@@ -218,7 +218,7 @@ action:
         state: "on"
       - condition: state
         entity_id: !input on_off_condition
-        state: "on"
+        state: "true"
     then:
       - action: light.turn_on
         data:
@@ -232,9 +232,10 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
+
       - condition: state
         entity_id: !input on_off_condition
-        state: "on"
+        state: "true"
     then:
       - action: light.turn_on
         data:
@@ -248,9 +249,10 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
+
       - condition: state
         entity_id: !input on_off_condition
-        state: "on"
+        state: "true"
     then:
       - action: light.turn_on
         data:
@@ -264,9 +266,10 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
+
       - condition: state
         entity_id: !input on_off_condition
-        state: "on"
+        state: "true"
     then:
       - action: light.turn_on
         data:
@@ -280,9 +283,10 @@ action:
       - condition: state
         entity_id: !input target_light
         state: "on"
+
       - condition: state
         entity_id: !input on_off_condition
-        state: "on"
+        state: "true"
     then:
       - action: light.turn_on
         data:
